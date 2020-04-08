@@ -12,6 +12,7 @@
 }
 
 
+
 #body{
 	background-image:#6bc9bb
 	/* background-image: linear-gradient(black, white);	 */
@@ -94,3 +95,18 @@
 		color:white;
 		background-color: black
 	}
+
+.request{
+	position: relative;
+	text-align: center;
+}
+
+
+.send{
+	margin-top: 10px;
+	background-color: grey;
+	width: 100px;
+	height: 25px;
+}
+
+
