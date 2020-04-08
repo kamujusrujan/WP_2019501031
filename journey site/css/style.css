@@ -10,3 +10,46 @@
   	/* border-bottom: solid 25px white; */
 
 }
+
+
+#body{
+	background-image:#6bc9bb
+	/* background-image: linear-gradient(black, white);	 */
+}
+
+
+
+.image{
+	position: relative;
+	width : 10%;
+	border-radius:  50%;
+	left:  60%	;
+    	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+}
+
+.data{
+	margin-top: 10px;
+	background-color: white;
+	/* margin-top:  */
+	padding: 10px 20px;
+  	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	/* text-align: center */
+}
+
+.attr{
+	font-weight: bold;
+
+}
+
+.value{
+	/* align */-content: center;
+	margin-left:   10%;
+	text-align: left;
+}
+
+.name{
+	font-family: sans-serif;
+	font-weight: bold;	
+
+}	
