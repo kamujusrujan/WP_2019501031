@@ -53,3 +53,44 @@
 	font-weight: bold;	
 
 }	
+
+.pDetails{
+	padding : 10px 10px;
+	/* background-color: silver */
+}
+
+
+
+
+.pDetails li{
+	/* font-family: ; */
+	padding : 5px;
+}
+
+
+
+
+.pDetails ol{
+	/* 	background-color: grey */
+	font-weight: bold;
+}	
+
+
+.table{
+	margin-top: 10px;
+	width: 80%	
+}
+
+.table ,.table td,.table th{
+	border-collapse: collapse;
+	border: solid 1px black;
+	padding : 5px;
+	text-align: center;
+
+}
+
+.table th{
+		height: 35px;
+		color:white;
+		background-color: black
+	}
