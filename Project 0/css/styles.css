@@ -6,7 +6,7 @@ body{
 }
 
 
-.banner{
+#banner{
 	/* border-top: solid 10px white; */
 	margin-top: 10px;
 	background-color: #ecedf0;
@@ -56,7 +56,7 @@ body{
 	/* right: : auto; */
 	height: 450px;
 	width: auto;
-	filter: blur(10px)
+	filter: blur(5px)
 }
 
 
@@ -82,7 +82,4 @@ body{
 	background-color: pink;
 	margin-bottom: 10px
 
-}
-.block p {
-
-}
+}	
