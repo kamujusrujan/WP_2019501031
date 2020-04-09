@@ -23,7 +23,7 @@ body{
 
 .shadow{
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-
+	/* margin-bottom: 10px  */
 }
 
 
@@ -50,9 +50,10 @@ body{
 
 .portimg{
 	position: absolute;
+
 	top :  0;
-	left: 38%;
-	/* right: auto; */
+	
+	/* right: : auto; */
 	height: 450px;
 	width: auto;
 	filter: blur(10px)
@@ -68,10 +69,20 @@ body{
 }
 
 .pagecontent{
-	background-color:  black;
+	/* background-color:  grey; */
 	height: 500px;
 	width: 80%;
 	margin  : 0 auto;
-
 	/* filter: blur(10px) */
+}
+
+.block{
+	color :  white;
+	padding :  20px;
+	background-color: pink;
+	margin-bottom: 10px
+
+}
+.block p {
+
 }
