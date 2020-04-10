@@ -3,7 +3,7 @@ body {
 }
 
 .grid {
-  background-color: #fcf5f2;
+  /* background-color: #fcf5f2; */
   display: grid;
   padding: 20px;
   justify-items: center;

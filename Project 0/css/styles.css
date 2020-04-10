@@ -1,6 +1,8 @@
 
 
-
+*{
+	line-height: 1cm;
+}
 
 strong{
 	/* font-family : Georgia;  */
@@ -15,6 +17,11 @@ body{
 
 }
 
+
+
+li{
+	padding :  5px;
+}
 
 #banner{
 	/* border-top: solid 10px white; */
@@ -64,7 +71,7 @@ body{
 	top :  0;
 	
 	/* right: : auto; */
-	height: 450px;
+	height: 475px;
 	width: auto;
 	filter: blur(5px)
 }
@@ -88,8 +95,9 @@ body{
 
 .block{
 	color :  white;
-	padding :  20px;
-	background-color: pink;
+	padding : 20px;
+	padding-bottom: 50px;
+	background-color: lightpink   ;
 	margin-bottom: 10px
 
 }	
@@ -106,7 +114,7 @@ ol{
 
 
 
-@media (max-width: 700px) {
+@media only screen and (max-width: 1000px) {
 .portimg{
 	display: none;
 	}
