@@ -1,0 +1,27 @@
+body {
+  background-color: #fcf5f2;
+}
+
+.grid {
+  background-color: #fcf5f2;
+  display: grid;
+  padding: 20px;
+  grid-column-gap: 20px;
+  grid-row-gap: 50px;
+  justify-items: center;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.grid .grid-item {
+  background-color: #fcf5f2;
+  padding: 5px;
+  text-align: center;
+}
+
+.block a {
+  color: black;
+}
+.block a:hover {
+  color: #fcf5f2;
+}
+
+/*# sourceMappingURL=stylesheet.css.map */

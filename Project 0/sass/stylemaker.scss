@@ -1,0 +1,41 @@
+@import 'attrs';
+
+
+body{
+	background-color : $primary-color;
+}
+
+
+.grid {
+	background-color: $primary-color;
+	display: grid;
+	padding: 20px;
+	grid-column-gap: 20px;
+	grid-row-gap: 50px;
+	justify-items : center;
+	grid-template-columns: 1fr 1fr 1fr;
+
+
+	.grid-item {
+		background-color: $primary-color;
+		padding: 5px;
+		text-align: center;
+
+	}
+}
+
+
+.block{
+	a{
+		color : $sec-color;	
+	}
+
+	a:hover{
+		color : $primary-color;
+	}
+
+}
+
+
+
+
