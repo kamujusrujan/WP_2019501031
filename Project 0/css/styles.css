@@ -109,7 +109,8 @@ li{
 
 
 ol{
-	list-style-type: none;	
+	/* padding-left :  100px; */
+	list-style-type: upper-roman;	
 }
 
 
