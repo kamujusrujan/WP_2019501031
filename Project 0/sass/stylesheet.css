@@ -6,22 +6,22 @@ body {
   background-color: #fcf5f2;
   display: grid;
   padding: 20px;
-  grid-column-gap: 20px;
-  grid-row-gap: 50px;
   justify-items: center;
   grid-template-columns: 1fr 1fr 1fr;
 }
 .grid .grid-item {
   background-color: #fcf5f2;
-  padding: 5px;
+  padding: 15px;
   text-align: center;
+  width: 100px;
+  height: auto;
 }
 
 .block a {
-  color: black;
+  color: #fcf5f2;
 }
 .block a:hover {
-  color: #fcf5f2;
+  color: black;
 }
 
 /*# sourceMappingURL=stylesheet.css.map */
