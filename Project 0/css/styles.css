@@ -114,6 +114,10 @@ ol{
 }
 
 
+ol li{
+	font-family: sans-serif;
+}
+
 
 
 @media only screen and (max-width: 1000px) {
