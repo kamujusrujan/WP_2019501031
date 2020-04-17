@@ -6,7 +6,8 @@ import random
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from database import *
-
+# from passlib.hash import sha256_crypt
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 # smaple
@@ -60,7 +61,7 @@ def login():
     mail,password = (request.form.get('mailid'), request.form.get('password'))
     u = User.query.filter_by(mail = mail).first()        
     
-    if u is not None and  u.password == password :
+    if u is not None and  check_password_hash(u.password,password)  :
         session['log'] = True
         session['name'] = u.name
         # flash('Logged In')
@@ -81,7 +82,7 @@ def register():
     if (request.method == "GET"):
         return render_template('registerpage.html')
 
-    mail,password = (request.form.get('mailid'), request.form.get('password'))
+    mail,password = (request.form.get('mailid'), generate_password_hash(str(request.form.get('password'))) )
     if User.query.filter_by(mail = mail).first() is not None:
         flash('User name already exsists','danger')
         return redirect(url_for('register'))   

@@ -8,3 +8,6 @@ class User(db.Model):
 	name = db.Column(db.String)
 	password = db.Column(db.String)
 	created_data  = db.Column(db.DateTime, default = datetime.datetime.utcnow)
+
+
+	
