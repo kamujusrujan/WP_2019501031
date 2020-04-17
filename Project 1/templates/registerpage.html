@@ -1,0 +1,17 @@
+
+{% extends "layout.html" %}
+
+{% block banner %}
+	Register page 
+{%endblock%}
+
+
+{% block body%}
+	{% with page = 'register' %}
+	{% include '_form.html' %}
+	{%endwith%}
+
+{% endblock %}
+
+
+
