@@ -1,6 +1,5 @@
 import os
 from functools import wraps
-
 from flask import Flask, session,render_template,request,url_for,redirect,flash
 import random 
 from sqlalchemy import create_engine
@@ -8,7 +7,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from database import *
 # from passlib.hash import sha256_crypt
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from Books_DB import *
 
 # smaple
 
@@ -76,7 +75,6 @@ def home():
     return render_template('mainpage.html', name = 'to the dashboard ' + session['name'])
 
 
-
 @app.route('/register', methods = ['GET','POST'])
 def register():
     if (request.method == "GET"):
@@ -93,7 +91,6 @@ def register():
     return redirect(url_for('login'))
 
 
-
 @app.route('/logout')
 def logout():
     session.clear()
@@ -107,3 +104,21 @@ def admin():
     userlist= User.query.order_by(User.created_data).all()
 
     return render_template('admin.html',list = userlist)
+
+
+@app.route('/search', methods = ['GET', 'POST'])
+def search():
+    if request.method == 'GET':
+        return render_template('search.html')
+    else:
+        # 380795272
+        book_isbn = request.form.get('isbn')
+        book_title = request.form.get('title')
+        book_author = request.form.get('author')
+        book_year = request.form.get('year')
+        print('*'*50)
+        print('INPUT',book_isbn, book_title, book_author, book_year)
+        book = Book.query.filter_by(isbn=book_isbn).first()
+        print(book.isbn, book.title, book.author, book.year)
+        print('*'*50)
+        return 'Nothing'
