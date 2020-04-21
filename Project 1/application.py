@@ -2,7 +2,8 @@ import os
 from functools import wraps
 from flask import Flask, session,render_template,request,url_for,redirect,flash
 import random 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, cast
+from sqlalchemy.types import String
 from sqlalchemy.orm import scoped_session, sessionmaker
 from database import *
 # from passlib.hash import sha256_crypt
@@ -21,7 +22,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 
 
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:srujan@localhost:5432/test'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:52416300@localhost:5432/test'
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://birawtnmsapodw:678f377d616ec505fb180996a6ecab8f3a3aaa51e47ab7719590df97ce7872ae@ec2-18-233-32-61.compute-1.amazonaws.com:5432/dad3mt6v6b5qe4"
 if not os.getenv("DATABASE_URL"):
@@ -47,6 +48,7 @@ def login_required(f):
 @app.route("/") 
 def index():
     db.create_all()
+    db.session.commit()
     if 'log' in session and 'name' in session :
         return render_template('mainpage.html',name = session['name'])
     return render_template('mainpage.html', name = '')
@@ -109,16 +111,23 @@ def admin():
 @app.route('/search', methods = ['GET', 'POST'])
 def search():
     if request.method == 'GET':
-        return render_template('search.html')
+        return render_template('search.html', book_len=0, book_list=[])
     else:
         # 380795272
         book_isbn = request.form.get('isbn')
         book_title = request.form.get('title')
         book_author = request.form.get('author')
         book_year = request.form.get('year')
-        print('*'*50)
-        print('INPUT',book_isbn, book_title, book_author, book_year)
-        book = Book.query.filter_by(isbn=book_isbn).first()
-        print(book.isbn, book.title, book.author, book.year)
-        print('*'*50)
-        return 'Nothing'
+
+        # print('*'*50)
+        # print('INPUT',book_isbn, book_title, book_author, book_year)
+
+        # book_list = Book.query.filter(Book.isbn.like('%'+book_isbn+'%') & Book.title.like('%'+book_title+'%') & Book.author.like('%'+book_author+'%')).all()
+        book_list = Book.query.filter(Book.isbn.like('%'+book_isbn+'%') & Book.title.like('%'+book_title+'%') & Book.author.like('%'+book_author+'%') & cast(Book.year,String).like('%'+str(book_year)+'%')).all()
+
+        # print(len(book_list))
+        # for book in book_list:
+            # print(book.isbn, book.title, book.author, book.year)
+        # print('*'*50)
+        return render_template('search.html', book_len=len(book_list), book_list=book_list)
+    
