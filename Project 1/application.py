@@ -24,7 +24,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:srujan@localhost:5432/test'
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://birawtnmsapodw:678f377d616ec505fb180996a6ecab8f3a3aaa51e47ab7719590df97ce7872ae@ec2-18-233-32-61.compute-1.amazonaws.com:5432/dad3mt6v6b5qe4"
+#app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://birawtnmsapodw:678f377d616ec505fb180996a6ecab8f3a3aaa51e47ab7719590df97ce7872ae@ec2-18-233-32-61.compute-1.amazonaws.com:5432/dad3mt6v6b5qe4"
 if not os.getenv("DATABASE_URL"):
     raise RuntimeError("DATABASE_URL is not set")
 
@@ -53,6 +53,13 @@ def index():
     return render_template('mainpage.html', name = '')
    
 
+@app.route('/test')
+def test():
+	# db.session.add( Ratings(isbn = '000723368X',mail = 'srujan@gmail.com',star = 3,description = 'could improve LMAO'))
+	# db.session.commit()
+	userlist = Ratings.query.all()
+	
+	return str([(a.rating_book.title, a.rating_users.mail) for a in userlist])  
 
 @app.route('/auth', methods = ['GET','POST'])
 def auth():
@@ -65,6 +72,7 @@ def auth():
         session['log'] = True
         session['name'] = u.name
         # flash('Logged In')
+        print(u.user_ratings)
         return redirect(url_for('home'))
     else:
         flash('Wrong Crendentials, Please Enter with your Eyes Open','danger')
