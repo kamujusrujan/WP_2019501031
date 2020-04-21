@@ -10,4 +10,4 @@ class User(db.Model):
 	created_data  = db.Column(db.DateTime, default = datetime.datetime.utcnow)
 
 
-	
+

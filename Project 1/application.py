@@ -39,7 +39,7 @@ def login_required(f):
     def decorated_function(*args, **kwargs):
         if 'log' not in session :
             flash('Login required','danger')
-            return redirect(url_for('login'))
+            return redirect(url_for('auth'))
         return f(*args, **kwargs)
     return decorated_function
 
@@ -54,8 +54,8 @@ def index():
    
 
 
-@app.route('/login', methods = ['GET','POST'])
-def login():
+@app.route('/auth', methods = ['GET','POST'])
+def auth():
     if(request.method == 'GET'):
         return render_template('loginpage.html')
     mail,password = (request.form.get('mailid'), request.form.get('password'))
@@ -69,6 +69,7 @@ def login():
     else:
         flash('Wrong Crendentials, Please Enter with your Eyes Open','danger')
         return render_template('loginpage.html')
+
 
 @app.route('/home')
 @login_required
@@ -90,7 +91,7 @@ def register():
     db.session.commit()
     # session['log'] = True
     flash('Registration successfull, Please login','success')
-    return redirect(url_for('login'))
+    return redirect(url_for('auth'))
 
 
 
@@ -98,12 +99,21 @@ def register():
 def logout():
     session.clear()
     flash('success logged out','success')
-    return redirect(url_for('login'))
+    return redirect(url_for('auth'))
+
+
+
+# @app.route('/book/<id>')
+# def logout(id):
+# 	l = [123123,'ABS book','asdasd',1997 ]
+#     session.clear()
+#     flash('success logged out','success')
+#     return redirect(url_for('login'))
+
 
 
 
 @app.route('/admin')
 def admin():
     userlist= User.query.order_by(User.created_data).all()
-
     return render_template('admin.html',list = userlist)
