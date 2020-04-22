@@ -53,13 +53,40 @@ def index():
     return render_template('mainpage.html', name = '')
    
 
-@app.route('/test')
-def test():
-	# db.session.add( Ratings(isbn = '000723368X',mail = 'srujan@gmail.com',star = 3,description = 'could improve LMAO'))
-	# db.session.commit()
-	userlist = Ratings.query.all()
+
+
+
+@app.route('/rating',methods = ['GET','POST'])
+@login_required
+def rating():
+	if(request.method == 'GET'):
+		return render_template('rating.html',list = Ratings.query.filter_by(mail = session['name']).all() )
 	
-	return str([(a.rating_book.title, a.rating_users.mail) for a in userlist])  
+
+	desc,stars = request.form.get('description'), request.form.get('rating')
+	db.session.add( Ratings(isbn = '62049879',mail = session['name'],star = stars,description = desc))
+	db.session.commit()
+	# userlist = Ratings.query.all()
+	return render_template('rating.html',list = Ratings.query.filter_by(mail = session['name']).all() )
+
+
+
+
+# @app.route('/rating',methods = ['GET','POST'])
+# @login_required
+# def rating():
+# 	isbn = '62049879';
+# 	if(request.method == 'GET'):
+# 		return render_template('rating.html',list = Ratings.query.filter_by( isbn = isbn).all() )
+	
+
+# 	desc,stars = request.form.get('description'), request.form.get('rating')
+# 	db.session.add( Ratings(isbn = '62049879',mail = session['name'],star = stars,description = desc))
+# 	db.session.commit()
+# 	# userlist = Ratings.query.all()
+# 	return render_template('rating.html',list = Ratings.query.filter_by(isbn = isbn ).all() )
+
+
 
 @app.route('/auth', methods = ['GET','POST'])
 def auth():
@@ -70,7 +97,7 @@ def auth():
     
     if u is not None and  check_password_hash(u.password,password)  :
         session['log'] = True
-        session['name'] = u.name
+        session['name'] = u.mail
         # flash('Logged In')
         print(u.user_ratings)
         return redirect(url_for('home'))
@@ -79,10 +106,16 @@ def auth():
         return render_template('loginpage.html')
 
 
+
+
+
 @app.route('/home')
 @login_required
 def home():    
     return render_template('mainpage.html', name = 'to the dashboard ' + session['name'])
+
+
+
 
 
 
@@ -103,20 +136,13 @@ def register():
 
 
 
+
+
 @app.route('/logout')
 def logout():
     session.clear()
     flash('success logged out','success')
     return redirect(url_for('auth'))
-
-
-
-# @app.route('/book/<id>')
-# def logout(id):
-# 	l = [123123,'ABS book','asdasd',1997 ]
-#     session.clear()
-#     flash('success logged out','success')
-#     return redirect(url_for('login'))
 
 
 
