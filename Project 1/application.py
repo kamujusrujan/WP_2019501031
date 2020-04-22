@@ -8,9 +8,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from database import *
 # from passlib.hash import sha256_crypt
 from werkzeug.security import generate_password_hash, check_password_hash
-from Books_DB import *
-
-# smaple
+# from Books_DB import *
 
 
 app = Flask(__name__)
@@ -39,7 +37,7 @@ def login_required(f):
     def decorated_function(*args, **kwargs):
         if 'log' not in session :
             flash('Login required','danger')
-            return redirect(url_for('login'))
+            return redirect(url_for('auth'))
         return f(*args, **kwargs)
     return decorated_function
 
@@ -55,8 +53,8 @@ def index():
    
 
 
-@app.route('/login', methods = ['GET','POST'])
-def login():
+@app.route('/auth', methods = ['GET','POST'])
+def auth():
     if(request.method == 'GET'):
         return render_template('loginpage.html')
     mail,password = (request.form.get('mailid'), request.form.get('password'))
@@ -73,7 +71,9 @@ def login():
 
 @app.route('/home')
 @login_required
-def home():    
+def home():
+    global book_list
+    book_list = []
     return render_template('mainpage.html', name = 'to the dashboard ' + session['name'])
 
 
@@ -90,14 +90,16 @@ def register():
     db.session.commit()
     # session['log'] = True
     flash('Registration successfull, Please login','success')
-    return redirect(url_for('login'))
+    return redirect(url_for('auth'))
 
 
 @app.route('/logout')
 def logout():
     session.clear()
+    global book_list
+    book_list = []
     flash('success logged out','success')
-    return redirect(url_for('login'))
+    return redirect(url_for('auth'))
 
 
 
@@ -127,6 +129,9 @@ def search():
         flag = False
 
         book_list = Book.query.filter(Book.isbn.like('%'+book_isbn+'%') & Book.title.like('%'+book_title+'%') & Book.author.like('%'+book_author+'%') & cast(Book.year,String).like('%'+str(book_year)+'%')).all()
+        book_list.sort(key=lambda x: x.title)
+
+
         if len(book_list) < 10 * (page_num + 1):
             flag = True
         
