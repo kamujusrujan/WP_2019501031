@@ -109,25 +109,51 @@ def admin():
 
 
 @app.route('/search', methods = ['GET', 'POST'])
+@login_required
 def search():
     if request.method == 'GET':
-        return render_template('search.html', book_len=0, book_list=[])
+        return render_template('search.html', book_len=0, book_list=[], page_num=0)
     else:
         # 380795272
+        global book_list
+        book_list = []
+
         book_isbn = request.form.get('isbn')
         book_title = request.form.get('title')
         book_author = request.form.get('author')
         book_year = request.form.get('year')
 
-        # print('*'*50)
-        # print('INPUT',book_isbn, book_title, book_author, book_year)
+        page_num = 0
+        flag = False
 
-        # book_list = Book.query.filter(Book.isbn.like('%'+book_isbn+'%') & Book.title.like('%'+book_title+'%') & Book.author.like('%'+book_author+'%')).all()
         book_list = Book.query.filter(Book.isbn.like('%'+book_isbn+'%') & Book.title.like('%'+book_title+'%') & Book.author.like('%'+book_author+'%') & cast(Book.year,String).like('%'+str(book_year)+'%')).all()
+        if len(book_list) < 10 * (page_num + 1):
+            flag = True
+        
+        page_cnt = len(book_list) // 10
+        if len(book_list) % 10 != 0:
+            page_cnt += 1
 
-        # print(len(book_list))
-        # for book in book_list:
-            # print(book.isbn, book.title, book.author, book.year)
-        # print('*'*50)
-        return render_template('search.html', book_len=len(book_list), book_list=book_list)
-    
+        return render_template('search.html', book_len=len(book_list), book_list=book_list, page=page_num, flag=flag, page_num=page_cnt)
+
+
+@app.route('/page/<num>', methods = ['GET'])
+@login_required
+def page(num):
+    # global book_list
+    print(book_list)
+    num = int(num)
+    flag = False
+
+    if len(book_list) < 10 * (num):
+        flag = True
+        
+    print('*'*50)
+    print(flag, len(book_list), 10*num)
+    print('*'*50)
+
+        
+    page_cnt = len(book_list) // 10
+    if len(book_list) % 10 != 0:
+        page_cnt += 1
+    return render_template('search.html', book_len=len(book_list), book_list=book_list, page=num-1, flag=flag, page_num=page_cnt)
