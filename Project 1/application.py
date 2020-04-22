@@ -56,35 +56,35 @@ def index():
 
 
 
-@app.route('/rating',methods = ['GET','POST'])
-@login_required
-def rating():
-	if(request.method == 'GET'):
-		return render_template('rating.html',list = Ratings.query.filter_by(mail = session['name']).all() )
-	
-
-	desc,stars = request.form.get('description'), request.form.get('rating')
-	db.session.add( Ratings(isbn = '62049879',mail = session['name'],star = stars,description = desc))
-	db.session.commit()
-	# userlist = Ratings.query.all()
-	return render_template('rating.html',list = Ratings.query.filter_by(mail = session['name']).all() )
-
-
-
-
 # @app.route('/rating',methods = ['GET','POST'])
 # @login_required
 # def rating():
-# 	isbn = '62049879';
 # 	if(request.method == 'GET'):
-# 		return render_template('rating.html',list = Ratings.query.filter_by( isbn = isbn).all() )
+# 		return render_template('rating.html',list = Ratings.query.filter_by(mail = session['name']).all() )
 	
 
 # 	desc,stars = request.form.get('description'), request.form.get('rating')
 # 	db.session.add( Ratings(isbn = '62049879',mail = session['name'],star = stars,description = desc))
 # 	db.session.commit()
 # 	# userlist = Ratings.query.all()
-# 	return render_template('rating.html',list = Ratings.query.filter_by(isbn = isbn ).all() )
+# 	return render_template('rating.html',list = Ratings.query.filter_by(mail = session['name']).all() )
+
+
+
+
+@app.route('/rating',methods = ['GET','POST'])
+@login_required
+def rating():
+	isbn = '62049879';
+	if(request.method == 'GET'):
+		return render_template('rating.html',list = Ratings.query.filter_by( isbn = isbn).all() )
+	
+
+	desc,stars = request.form.get('description'), request.form.get('rating')
+	db.session.add( Ratings(isbn = '62049879',mail = session['name'],star = stars,description = desc))
+	db.session.commit()
+	# userlist = Ratings.query.all()
+	return render_template('rating.html',list = Ratings.query.filter_by(isbn = isbn ).all() )
 
 
 
