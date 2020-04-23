@@ -122,7 +122,6 @@ def logout():
     return redirect(url_for('auth'))
 
 
-
 @app.route('/admin')
 def admin():
     userlist = User.query.order_by(User.created_data).all()
