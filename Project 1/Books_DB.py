@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template, request, session, url_for, redirect
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
@@ -41,3 +42,5 @@ class Book(db.Model):
 
 if __name__ == "__main__":
 	upload()
+
+

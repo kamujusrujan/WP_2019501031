@@ -2,7 +2,9 @@
 <!DOCTYPE html>
 <html>
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+
 <link rel="stylesheet" type = "text/css" href="{{url_for('static',filename ='style.css')}}">
+
 <head>
 	<title>Flask page</title>
 </head>
@@ -12,15 +14,16 @@
 		<h1> {%block banner %} {% endblock %} </h1>
 	</div>
 	
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <ul class= container>
-    {% for category, message in messages %}
-      <div class="alert alert-{{ category }}">{{ message }}</div>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
+	
+	{% with messages = get_flashed_messages(with_categories=true) %}
+	  {% if messages %}
+	    <ul class= container>
+	    {% for category, message in messages %}
+	      <div class="alert alert-{{ category }}">{{ message }}</div>
+	    {% endfor %}
+	    </ul>
+	  {% endif %}
+	{% endwith %}
 
 
 	<div class="container">
