@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
-<!-- <link rel="stylesheet" href="{{url_for('static',filename ='css/style.css')}}"> -->
+<link rel="stylesheet" type = "text/css" href="{{url_for('static',filename ='style.css')}}">
 <head>
 	<title>Flask page</title>
 </head>
@@ -24,7 +24,9 @@
 
 
 	<div class="container">
-		{%block body %} {% endblock %} 
+		
+		{%block body %} {% endblock %}
+		
 	</div>
 
 </body>

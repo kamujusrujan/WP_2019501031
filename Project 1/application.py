@@ -6,6 +6,7 @@ import random
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from database import *
+# from Books_DB import *
 # from passlib.hash import sha256_crypt
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -107,3 +108,13 @@ def admin():
     userlist= User.query.order_by(User.created_data).all()
 
     return render_template('admin.html',list = userlist)
+
+
+@app.route('/book/<id>', methods=['GET'])
+def book(id):
+    flag = False
+    book_data = Book.query.filter_by(isbn = id).first()
+    review_list  = Ratings.query.filter_by(isbn = id).all()
+    if(len(review_list) == 0):
+        flag = True
+    return render_template('book.html', book=book_data , reviews = review_list,flag = flag)

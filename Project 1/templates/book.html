@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block banner %}
+	
+	{{book.title}}
+	
+{%endblock%}
+
+{% block body%}
+<div class="row">
+<div class="col-md-4 col-md-4">	
+
+<div class="card bg-dark text-black">
+  <img class="card-img" src="/static/7.png" alt="Card image">
+  <div class="card-img-overlay">
+    <h5 class="card-title">About the Book</h5>
+    <p class="card-text"> ISBN: {{ book.isbn }} </p>
+    <p class="card-text"> Author: {{ book.author }} </p>
+    <p class="card-text"> Year: {{ book.year }} </p>
+
+  </div>
+</div>
+
+</div>
+<div class="col-md-6 col-md-6">
+	
+
+<h2>Reviews : </h2>
+<p>You can give your review in the review section below. &#128516;</p>
+
+{% if flag %}
+	<h3> No reviews yet </h3>
+{% endif %}
+
+{% for review in reviews %}
+
+<div class="test">
+  <img src="/static/4.jpg" alt="Avatar" style="width:90px">
+  <p><span>{{review.rating_users.name}}</span> Rating: {{review.star}} </p>
+  <p>{{review.description}}</p>
+</div>
+
+{% endfor %}
+
+</div>
+</div>
+
+
+
+
+	<!-- <div class="card bg-dark text-white">
+
+	  <img class="card-img" src="/static/7.png" alt="Card image">
+	  <div class="card-img-overlay">
+
+	    
+	    <div class="card-header">About the book</div>
+	    <h2> About the book </h2>
+	    <br>
+	    
+	    <p class="card-text"> ISBN: {{ book.isbn }} </p>
+	    <p class="card-text"> Author: {{ book.author }} </p>
+	    <p class="card-text"> Year: {{ book.year }} </p>
+
+		</div>
+	</div> -->
+	
+
+	
+
+{% endblock %}
+
