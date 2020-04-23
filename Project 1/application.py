@@ -6,6 +6,7 @@ from sqlalchemy import create_engine, cast
 from sqlalchemy.types import String
 from sqlalchemy.orm import scoped_session, sessionmaker
 from database import *
+# from Books_DB import *
 # from passlib.hash import sha256_crypt
 from werkzeug.security import generate_password_hash, check_password_hash
 # from Books_DB import *
@@ -127,6 +128,18 @@ def admin():
     return render_template('admin.html',list = userlist)
 
 
+
+@app.route('/book/<id>', methods=['GET'])
+def book(id):
+    flag = False
+    book_data = Book.query.filter_by(isbn = id).first()
+    review_list  = Ratings.query.filter_by(isbn = id).all()
+    if(len(review_list) == 0):
+        flag = True
+    return render_template('book.html', book=book_data , reviews = review_list,flag = flag)
+
+
+
 @app.route('/search', methods = ['GET', 'POST'])
 @login_required
 def search():
@@ -180,3 +193,4 @@ def page(num):
     
     
     return render_template('search.html', book_len=len(book_list), book_list=book_list, page=num-1, flag=flag, page_num=page_cnt)
+

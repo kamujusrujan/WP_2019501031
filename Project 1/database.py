@@ -10,7 +10,6 @@ class User(db.Model):
 	created_data  = db.Column(db.DateTime, default = datetime.datetime.utcnow)
 	user_ratings = db.relationship('Ratings', lazy='select',backref= "rating_users" )
 
-
 class Book(db.Model):
 	__tablename__ = "Books"
 	isbn = db.Column(db.String,primary_key = True )
@@ -26,4 +25,3 @@ class Ratings(db.Model):
     mail = db.Column(db.String, db.ForeignKey('registeredUsers.mail'), primary_key = True)
     star = db.Column(db.Float)
     description = db.Column(db.String)
-
