@@ -105,7 +105,7 @@ def logout():
 
 @app.route('/admin')
 def admin():
-    userlist= User.query.order_by(User.created_data).all()
+    userlist = User.query.order_by(User.created_data).all()
 
     return render_template('admin.html',list = userlist)
 
@@ -131,6 +131,8 @@ def search():
         book_list = Book.query.filter(Book.isbn.like('%'+book_isbn+'%') & Book.title.like('%'+book_title+'%') & Book.author.like('%'+book_author+'%') & cast(Book.year,String).like('%'+str(book_year)+'%')).all()
         book_list.sort(key=lambda x: x.title)
 
+        if len(book_list) == 0:
+            flash('No Books Found with the given parameters.','danger')
 
         if len(book_list) < 10 * (page_num + 1):
             flag = True
@@ -138,6 +140,7 @@ def search():
         page_cnt = len(book_list) // 10
         if len(book_list) % 10 != 0:
             page_cnt += 1
+
 
         return render_template('search.html', book_len=len(book_list), book_list=book_list, page=page_num, flag=flag, page_num=page_cnt)
 
@@ -153,12 +156,10 @@ def page(num):
     if len(book_list) < 10 * (num):
         flag = True
         
-    print('*'*50)
-    print(flag, len(book_list), 10*num)
-    print('*'*50)
-
-        
     page_cnt = len(book_list) // 10
     if len(book_list) % 10 != 0:
         page_cnt += 1
+
+    
+    
     return render_template('search.html', book_len=len(book_list), book_list=book_list, page=num-1, flag=flag, page_num=page_cnt)
