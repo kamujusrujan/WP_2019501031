@@ -24,7 +24,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:srujan@localhost:5432/test'
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://birawtnmsapodw:678f377d616ec505fb180996a6ecab8f3a3aaa51e47ab7719590df97ce7872ae@ec2-18-233-32-61.compute-1.amazonaws.com:5432/dad3mt6v6b5qe4"
+#app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://birawtnmsapodw:678f377d616ec505fb180996a6ecab8f3a3aaa51e47ab7719590df97ce7872ae@ec2-18-233-32-61.compute-1.amazonaws.com:5432/dad3mt6v6b5qe4"
 if not os.getenv("DATABASE_URL"):
     raise RuntimeError("DATABASE_URL is not set")
 
@@ -54,6 +54,40 @@ def index():
    
 
 
+
+
+# @app.route('/rating',methods = ['GET','POST'])
+# @login_required
+# def rating():
+# 	if(request.method == 'GET'):
+# 		return render_template('rating.html',list = Ratings.query.filter_by(mail = session['name']).all() )
+	
+
+# 	desc,stars = request.form.get('description'), request.form.get('rating')
+# 	db.session.add( Ratings(isbn = '62049879',mail = session['name'],star = stars,description = desc))
+# 	db.session.commit()
+# 	# userlist = Ratings.query.all()
+# 	return render_template('rating.html',list = Ratings.query.filter_by(mail = session['name']).all() )
+
+
+
+
+@app.route('/rating',methods = ['GET','POST'])
+@login_required
+def rating():
+	isbn = '62049879';
+	if(request.method == 'GET'):
+		return render_template('rating.html',list = Ratings.query.filter_by( isbn = isbn).all() )
+	
+
+	desc,stars = request.form.get('description'), request.form.get('rating')
+	db.session.add( Ratings(isbn = '62049879',mail = session['name'],star = stars,description = desc))
+	db.session.commit()
+	# userlist = Ratings.query.all()
+	return render_template('rating.html',list = Ratings.query.filter_by(isbn = isbn ).all() )
+
+
+
 @app.route('/auth', methods = ['GET','POST'])
 def auth():
     if(request.method == 'GET'):
@@ -63,18 +97,25 @@ def auth():
     
     if u is not None and  check_password_hash(u.password,password)  :
         session['log'] = True
-        session['name'] = u.name
+        session['name'] = u.mail
         # flash('Logged In')
+        print(u.user_ratings)
         return redirect(url_for('home'))
     else:
         flash('Wrong Crendentials, Please Enter with your Eyes Open','danger')
         return render_template('loginpage.html')
 
 
+
+
+
 @app.route('/home')
 @login_required
 def home():    
     return render_template('mainpage.html', name = 'to the dashboard ' + session['name'])
+
+
+
 
 
 
@@ -95,20 +136,13 @@ def register():
 
 
 
+
+
 @app.route('/logout')
 def logout():
     session.clear()
     flash('success logged out','success')
     return redirect(url_for('auth'))
-
-
-
-# @app.route('/book/<id>')
-# def logout(id):
-# 	l = [123123,'ABS book','asdasd',1997 ]
-#     session.clear()
-#     flash('success logged out','success')
-#     return redirect(url_for('login'))
 
 
 
