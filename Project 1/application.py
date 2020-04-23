@@ -120,9 +120,6 @@ def logout():
     flash('success logged out','success')
     return redirect(url_for('auth'))
 
->>>>>>> 2ccd44f512580e7c62225bae0461d60ced7c1a9f
-
-
 
 @app.route('/admin')
 def admin():
