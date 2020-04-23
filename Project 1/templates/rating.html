@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<ol>
+{% for rate in list %}
+	
+		<li>
+			<ul>
+			<li>
+				{{rate.rating_users.mail}}
+			</li>
+			<li>
+				{{rate.star}}
+			</li>
+			<li>
+				{{rate.description}}
+			</li>
+			<li>
+				{{rate.rating_book.title}}
+			</li>
+			</ul>
+		</li>
+	
+{% endfor %}
+</ol>	
+
+
+
+
+<form action="{{url_for('rating')}}" , method="POST">
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputCity">Description</label>
+      {# <input type="text" class="form-control" id="inputCity"> #}
+      <textarea name = "description"  class="form-control" > </textarea>
+    </div>
+    <div class="form-group col-md-2">
+      <label for="inputState">Rating</label>
+      <select name="rating" class="form-control">
+        <option selected>Choose...</option>
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+      </select>
+    </div>
+   
+</div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
+{% endblock %}
