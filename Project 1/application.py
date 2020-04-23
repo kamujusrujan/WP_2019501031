@@ -53,19 +53,19 @@ def index():
     return render_template('mainpage.html', name = '')
   
 
-@app.route('/rating',methods = ['GET','POST'])
-@login_required
-def rating():
-	isbn = '62049879';
-	if(request.method == 'GET'):
-		return render_template('rating.html',list = Ratings.query.filter_by( isbn = isbn).all() )
-	
+# @app.route('/rating',methods = ['GET','POST'])
+# @login_required
+# def rating():
+#     isbn = '62049879';
+#     if(request.method == 'GET'):
+#         return render_template('rating.html',list = Ratings.query.filter_by( isbn = isbn).all() )
+    
 
-	desc,stars = request.form.get('description'), request.form.get('rating')
-	db.session.add( Ratings(isbn = '62049879',mail = session['name'],star = stars,description = desc))
-	db.session.commit()
-	# userlist = Ratings.query.all()
-	return render_template('rating.html',list = Ratings.query.filter_by(isbn = isbn ).all() )
+#     desc,stars = request.form.get('description'), request.form.get('rating')
+#     db.session.add( Ratings(isbn = '62049879',mail = session['name'],star = stars,description = desc))
+#     db.session.commit()
+#     # userlist = Ratings.query.all()
+#     return render_template('rating.html',list = Ratings.query.filter_by(isbn = isbn ).all() )
 
 
 
@@ -129,8 +129,18 @@ def admin():
 
 
 
-@app.route('/book/<id>', methods=['GET'])
+@app.route('/book/<id>', methods=['GET','POST'])
 def book(id):
+    if(request.method == 'POST'):
+        desc,stars = request.form.get('description'), request.form.get('rating')
+
+        duplicate = Ratings.query.filter_by(isbn = id,mail = session['name']).first() 
+        if duplicate is not None:
+            flash("You have already reviewed this book",'danger')
+        else:
+            db.session.add( Ratings(isbn = id,mail = session['name'],star = stars,description = desc))
+            db.session.commit()
+
     flag = False
     book_data = Book.query.filter_by(isbn = id).first()
     review_list  = Ratings.query.filter_by(isbn = id).all()
@@ -175,6 +185,8 @@ def search():
         return render_template('search.html', book_len=len(book_list), book_list=book_list, page=page_num, flag=flag, page_num=page_cnt)
 
 
+
+
 @app.route('/page/<num>', methods = ['GET'])
 @login_required
 def page(num):
@@ -182,15 +194,10 @@ def page(num):
     print(book_list)
     num = int(num)
     flag = False
-
     if len(book_list) < 10 * (num):
         flag = True
-        
     page_cnt = len(book_list) // 10
     if len(book_list) % 10 != 0:
         page_cnt += 1
-
-    
-    
     return render_template('search.html', book_len=len(book_list), book_list=book_list, page=num-1, flag=flag, page_num=page_cnt)
 

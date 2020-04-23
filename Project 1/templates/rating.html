@@ -1,33 +1,7 @@
-{% extends "layout.html" %}
-
-{% block body %}
-<ol>
-{% for rate in list %}
-	
-		<li>
-			<ul>
-			<li>
-				{{rate.rating_users.mail}}
-			</li>
-			<li>
-				{{rate.star}}
-			</li>
-			<li>
-				{{rate.description}}
-			</li>
-			<li>
-				{{rate.rating_book.title}}
-			</li>
-			</ul>
-		</li>
-	
-{% endfor %}
-</ol>	
 
 
-
-
-<form action="{{url_for('rating')}}" , method="POST">
+<form action= "#" , method="POST">
+  <h3>Add a Review to the book </h3>
   <div class="form-row">
     <div class="form-group col-md-6">
       <label for="inputCity">Description</label>
@@ -51,4 +25,3 @@
 </form>
 
 
-{% endblock %}
