@@ -26,6 +26,26 @@
   <button class="btn btn-primary mb-2">Search</button>
 </form>
 
+<!-- {% if book_len > 0 %}
+  <div class="row">
+  {% for book in book_list %}
+  <div class="col-sm-5">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ book.title }}</h5>
+        <p class="card-text">ISBN: {{ book.isbn }}</p>
+        <p class="card-text">Author: {{ book.author }}</p>
+        <p class="card-text">Year: {{ book.year }}</p>
+
+        <a href="/book/{{book.isbn}}" class="btn btn-primary">Open</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  </div>
+{% endif %} -->
+
+
 {% if book_len > 0 %}
   <div class="row">
     {% if flag %}
