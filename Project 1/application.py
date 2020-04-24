@@ -56,36 +56,23 @@ def index():
 
 
 
-# @app.route('/rating',methods = ['GET','POST'])
-# @login_required
-# def rating():
-# 	if(request.method == 'GET'):
-# 		return render_template('rating.html',list = Ratings.query.filter_by(mail = session['name']).all() )
-	
-
-# 	desc,stars = request.form.get('description'), request.form.get('rating')
-# 	db.session.add( Ratings(isbn = '62049879',mail = session['name'],star = stars,description = desc))
-# 	db.session.commit()
-# 	# userlist = Ratings.query.all()
-# 	return render_template('rating.html',list = Ratings.query.filter_by(mail = session['name']).all() )
-
-
-
 
 @app.route('/book/<id>',methods = ['GET','POST'])
 @login_required
 def rating(id):
-	# isbn = '62049879'
-	isbn = id
-	if(request.method == 'GET'):
-		return render_template('rating.html',list = Ratings.query.filter_by( isbn = isbn).all() )
-	
+    if(request.method == 'POST'):
+            desc,stars = request.form.get('description'), request.form.get('rating')
+            duplicate = Ratings.query.filter_by(isbn = id,mail = session['name']).first() 
+            if duplicate is not None:
+                flash("already review",'danger')
+            else:
+                db.session.add( Ratings(isbn = id,mail = session['name'],star = stars,description = desc))
+                db.session.commit()
 
-	desc,stars = request.form.get('description'), request.form.get('rating')
-	db.session.add( Ratings(isbn = isbn ,mail = session['name'],star = stars,description = desc))
-	db.session.commit()
-	# userlist = Ratings.query.all()
-	return render_template('rating.html',list = Ratings.query.filter_by(isbn = isbn ).all() )
+    list  = Ratings.query.filter_by(isbn = id).all()
+    return render_template('rating.html', list = list)
+
+
 
 
 
