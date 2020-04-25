@@ -1,0 +1,69 @@
+/*.card{
+	width: 70%;
+	height: auto;
+	object-fit: scale-down;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	
+}
+
+
+.card-text{
+	color: black;
+	text-align: center;
+	font-size: 100%;
+	padding: 0.5%;
+
+}
+
+.card-header{
+	color: tomato;
+	font-size: 250%;
+	text-align: center;
+}*/
+
+
+
+.test {
+  border: 2px solid #ccc;
+  background-color: #eee;
+  border-radius: 5px;
+  padding: 16px;
+  margin: 16px 0
+}
+
+.test::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.test img {
+  float: left;
+  margin-right: 20px;
+  border-radius: 50%;
+}
+
+.test span {
+  font-size: 20px;
+  margin-right: 15px;
+}
+
+
+.review_section {
+  margin-top: 50px;
+}
+
+
+
+@media (max-width: 500px) {
+  .test {
+      text-align: center;
+  }
+  .test img {
+      margin: auto;
+      float: none;
+      display: block;
+  }
+}

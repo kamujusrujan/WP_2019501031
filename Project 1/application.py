@@ -1,16 +1,15 @@
 import os
 from functools import wraps
-
 from flask import Flask, session,render_template,request,url_for,redirect,flash
 import random 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, cast
+from sqlalchemy.types import String
 from sqlalchemy.orm import scoped_session, sessionmaker
 from database import *
+# from Books_DB import *
 # from passlib.hash import sha256_crypt
 from werkzeug.security import generate_password_hash, check_password_hash
-
-
-# smaple
+# from Books_DB import *
 
 
 app = Flask(__name__)
@@ -22,7 +21,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 
 
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:srujan@localhost:5432/test'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:52416300@localhost:5432/test'
 
 #app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://birawtnmsapodw:678f377d616ec505fb180996a6ecab8f3a3aaa51e47ab7719590df97ce7872ae@ec2-18-233-32-61.compute-1.amazonaws.com:5432/dad3mt6v6b5qe4"
 if not os.getenv("DATABASE_URL"):
@@ -48,14 +47,11 @@ def login_required(f):
 @app.route("/") 
 def index():
     db.create_all()
+    db.session.commit()
     if 'log' in session and 'name' in session :
         return render_template('mainpage.html',name = session['name'])
     return render_template('mainpage.html', name = '')
-   
-
-
-
-
+  
 
 @app.route('/book/<id>',methods = ['GET','POST'])
 @login_required
@@ -87,7 +83,6 @@ def auth():
         session['log'] = True
         session['name'] = u.mail
         # flash('Logged In')
-        print(u.user_ratings)
         return redirect(url_for('home'))
     else:
         flash('Wrong Crendentials, Please Enter with your Eyes Open','danger')
@@ -99,13 +94,10 @@ def auth():
 
 @app.route('/home')
 @login_required
-def home():    
+def home():
+    global book_list
+    book_list = []
     return render_template('mainpage.html', name = 'to the dashboard ' + session['name'])
-
-
-
-
-
 
 @app.route('/register', methods = ['GET','POST'])
 def register():
@@ -123,19 +115,89 @@ def register():
     return redirect(url_for('auth'))
 
 
-
-
-
 @app.route('/logout')
 def logout():
     session.clear()
+    global book_list
+    book_list = []
     flash('success logged out','success')
     return redirect(url_for('auth'))
 
 
-
-
 @app.route('/admin')
 def admin():
-    userlist= User.query.order_by(User.created_data).all()
+    userlist = User.query.order_by(User.created_data).all()
     return render_template('admin.html',list = userlist)
+
+
+
+@app.route('/book/<id>', methods=['GET','POST'])
+def book(id):
+    if(request.method == 'POST'):
+        desc,stars = request.form.get('description'), request.form.get('rating')
+
+        duplicate = Ratings.query.filter_by(isbn = id,mail = session['name']).first() 
+        if duplicate is not None:
+            flash("You have already reviewed this book",'danger')
+        else:
+            db.session.add( Ratings(isbn = id,mail = session['name'],star = stars,description = desc))
+            db.session.commit()
+
+    flag = False
+    book_data = Book.query.filter_by(isbn = id).first()
+    review_list  = Ratings.query.filter_by(isbn = id).all()
+    if(len(review_list) == 0):
+        flag = True
+    return render_template('book.html', book=book_data , reviews = review_list,flag = flag)
+
+
+
+@app.route('/search', methods = ['GET', 'POST'])
+@login_required
+def search():
+    if request.method == 'GET':
+        return render_template('search.html', book_len=0, book_list=[], page_num=0)
+    else:
+        # 380795272
+        global book_list
+        book_list = []
+
+        book_isbn = request.form.get('isbn')
+        book_title = request.form.get('title')
+        book_author = request.form.get('author')
+        book_year = request.form.get('year')
+
+        page_num = 0
+        flag = False
+
+        book_list = Book.query.filter(Book.isbn.like('%'+book_isbn+'%') & Book.title.like('%'+book_title+'%') & Book.author.like('%'+book_author+'%') & cast(Book.year,String).like('%'+str(book_year)+'%')).all()
+        book_list.sort(key=lambda x: x.title)
+
+        if len(book_list) == 0:
+            flash('No Books Found with the given parameters.','danger')
+
+        if len(book_list) < 10 * (page_num + 1):
+            flag = True
+        
+        page_cnt = len(book_list) // 10
+        if len(book_list) % 10 != 0:
+            page_cnt += 1
+
+
+        return render_template('search.html', book_len=len(book_list), book_list=book_list, page=page_num, flag=flag, page_num=page_cnt)
+
+
+
+
+@app.route('/page/<num>', methods = ['GET'])
+@login_required
+def page(num):
+    num = int(num)
+    flag = False
+    if len(book_list) < 10 * (num):
+        flag = True
+    page_cnt = len(book_list) // 10
+    if len(book_list) % 10 != 0:
+        page_cnt += 1
+    return render_template('search.html', book_len=len(book_list), book_list=book_list, page=num-1, flag=flag, page_num=page_cnt)
+

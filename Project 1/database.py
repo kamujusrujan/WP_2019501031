@@ -25,5 +25,3 @@ class Ratings(db.Model):
     mail = db.Column(db.String, db.ForeignKey('registeredUsers.mail'), primary_key = True)
     star = db.Column(db.Float)
     description = db.Column(db.String)
-        
-

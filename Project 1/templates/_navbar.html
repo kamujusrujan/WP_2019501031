@@ -10,6 +10,9 @@
        <li class ='nav-item'>
           <a class = 'nav-link' href="{{url_for('logout')}}">Logout</a>
        </li>
+       <li class ='nav-item '>
+          <a class = 'nav-link' href="{{url_for('search')}}">Search</a>
+       </li>
        {% else %}
         <li class ='nav-item'>
           <a class = 'nav-link' href="{{url_for('auth')}}">Login</a>
@@ -18,9 +21,7 @@
           <a class = 'nav-link' href="{{url_for('register')}}">Register</a>
        </li>
        {% endif %}
-       <li class ='nav-item '>
-          <a class = 'nav-link' href="#">Search</a>
-       </li>
+       
        
       
     </ul>
