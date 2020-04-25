@@ -80,7 +80,6 @@ def auth():
         session['log'] = True
         session['name'] = u.mail
         # flash('Logged In')
-        print(u.user_ratings)
         return redirect(url_for('home'))
     else:
         flash('Wrong Crendentials, Please Enter with your Eyes Open','danger')
