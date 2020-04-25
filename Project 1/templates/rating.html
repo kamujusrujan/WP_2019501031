@@ -1,36 +1,7 @@
 
-
-{% block body %}
-<ol>
-{% for rate in list %}
-	
-		<li>
-			<ul>
-			<li>
-				{{rate.rating_users.mail}}
-			</li>
-			<li>
-				{{rate.star}}
-			</li>
-			<li>
-				{{rate.description}}
-			</li>
-			<li>
-				{{rate.rating_book.title}}
-			</li>
-			</ul>
-		</li>
-	
-{% endfor %}
-</ol>	
-
-
-
-
 <hr>
 <form action= "#" , method="POST">
   <h4>Add a Review to the book </h4>
-
   <div class="form-row">
     <div class="form-group col-md-6">
       <label for="inputCity">Description</label>
