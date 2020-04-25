@@ -190,8 +190,6 @@ def search():
 @app.route('/page/<num>', methods = ['GET'])
 @login_required
 def page(num):
-    # global book_list
-    print(book_list)
     num = int(num)
     flag = False
     if len(book_list) < 10 * (num):
