@@ -35,11 +35,11 @@ const student = {
 
 const student2 = {
 	name:'srujan',
-	grade : 'b',
 	circle : {
 		f:3
-	} 
-}
+	} ,
+	grade : 'b'
+	}
 
 
 
@@ -52,5 +52,17 @@ const student3 = {
 	} 
 }
 
+
+const student4 = {
+	name:'sourabh',
+	grade : 'a+',
+	circle : {
+		f:2
+	} 
+}
+
+
+
 console.log(deepEqual(student,student2));
 console.log(deepEqual(student,student3));
+console.log(deepEqual(student4,student4));
