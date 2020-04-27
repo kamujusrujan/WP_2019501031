@@ -132,7 +132,6 @@ def admin():
 def book(id):
     if(request.method == 'POST'):
         desc,stars = request.form.get('description'), request.form.get('rating')
-
         duplicate = Ratings.query.filter_by(isbn = id,mail = session['name']).first() 
         if duplicate is not None:
             flash("You have already reviewed this book",'danger')
