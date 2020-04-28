@@ -58,6 +58,7 @@ def index():
 def login():
     if(request.method == 'GET'):
         return render_template('loginpage.html')
+    print(str(request.form))
     mail,password = (request.form.get('mailid'), request.form.get('password'))
     u = User.query.filter_by(mail = mail).first()        
     
