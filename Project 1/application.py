@@ -162,7 +162,7 @@ def search():
         book_title = request.form.get('title')
         book_author = request.form.get('author')
         book_year = request.form.get('year')
-
+        # print(dict(request.form))
         page_num = 0
         flag = False
 
@@ -196,4 +196,19 @@ def page(num):
     if len(book_list) % 10 != 0:
         page_cnt += 1
     return render_template('search.html', book_len=len(book_list), book_list=book_list, page=num-1, flag=flag, page_num=page_cnt)
+
+
+
+@app.route('/api/submit_review',methods = ['POST'])
+def submit_review():
+    data = dict(request.args)
+    desc,stars,mail,isbn = data['description'],data['stars'],data['mailid'],data['isbn']
+    if Book.query.filter_by(isbn = isbn).first() is None:
+        return {'status':400}
+    try:
+        db.session.add( Ratings(isbn = isbn ,mail = mail ,star = stars ,description = desc))
+        db.session.commit()
+        return {'status':200}
+    except:
+        return {'status' : 500}
 
