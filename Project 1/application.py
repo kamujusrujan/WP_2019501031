@@ -161,25 +161,3 @@ def page(num):
     
     
     return render_template('search.html', book_len=len(book_list), book_list=book_list, page=num-1, flag=flag, page_num=page_cnt)
-
-
-@app.route('/api/search', methods=['POST'])
-def api_search():
-    data = dict(request.args)
-    loc_data = {'isbn':'', 'title':'', 'author':'', 'year':''}
-    for each in data:
-        loc_data[each] = data[each]
-    try:
-        book_list = Book.query.filter(Book.isbn.like('%'+loc_data['isbn']+'%') & Book.title.like('%'+loc_data['title']+'%') & Book.author.like('%'+loc_data['author']+'%') & cast(Book.year,String).like('%'+str(loc_data['year'])+'%')).all()
-        
-        ret_list = []
-        ret_data = {}
-        if len(book_list) == 0:
-            return jsonify({'status': 400})
-        for each in book_list:
-            ret_list.append({'isbn':each.isbn, 'title':each.title, 'author':each.author, 'year':each.year})
-        ret_data['books'] = ret_list
-        ret_data['status'] = 200
-        return jsonify(ret_data)
-    except:
-        return jsonify({'status': 500})
