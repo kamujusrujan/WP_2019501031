@@ -1,6 +1,7 @@
 import os
 from functools import wraps
-from flask import Flask, session,render_template,request,url_for,redirect,flash
+from flask import Flask, session,render_template,request,url_for,redirect,flash, jsonify
+from flask_cors import CORS, cross_origin
 import random 
 from sqlalchemy import create_engine, cast
 from sqlalchemy.types import String
@@ -198,3 +199,46 @@ def page(num):
         page_cnt += 1
     return render_template('search.html', book_len=len(book_list), book_list=book_list, page=num-1, flag=flag, page_num=page_cnt)
 
+
+@app.route('/api/search', methods=['POST'])
+def api_search():
+    data = dict(request.args)
+
+    loc_data = {'isbn':'', 'title':'', 'author':'', 'year':''}
+    for each in data:
+        loc_data[each] = data[each]
+    try:
+        book_list = Book.query.filter(Book.isbn.like('%'+loc_data['isbn']+'%') & Book.title.like('%'+loc_data['title']+'%') & Book.author.like('%'+loc_data['author']+'%') & cast(Book.year,String).like('%'+str(loc_data['year'])+'%')).all()
+        
+        ret_list = []
+        ret_data = {}
+        if len(book_list) == 0:
+            return jsonify({'status': 400})
+        for each in book_list:
+            ret_list.append({'isbn':each.isbn, 'title':each.title, 'author':each.author, 'year':each.year})
+        ret_data['books'] = ret_list
+        ret_data['status'] = 200
+
+        
+        return jsonify(ret_data)
+    except:
+        return jsonify({'status': 500})
+
+
+@app.route('/api/book_details', methods=['GET'])
+def book_details():
+    data = dict(request.args)
+    id = data['isbn']
+    book = Book.query.filter_by(isbn = id).first()
+    review_list  = Ratings.query.filter_by(isbn = id).all()
+    r = []
+    for each in review_list:
+        temp = {}
+        temp['name'] = each.rating_users.name
+        temp['rating'] = each.star
+        temp['description'] = each.description
+        r.append(temp)
+
+    # ISBN to check review: 62049879
+
+    return jsonify({'status':200, 'book': [book.title, book.author, book.isbn, book.year], 'reviews':r})
