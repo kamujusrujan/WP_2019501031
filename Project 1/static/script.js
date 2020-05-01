@@ -10,7 +10,7 @@ function clearList() {
 document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelector('.btn').onclick = function() {
-        const request = new XMLHttpRequest()
+        const request = new XMLHttpRequest();
         const isbn = document.querySelector('#isbn').value
         const title = document.querySelector('#title').value
         const author = document.querySelector('#author').value
@@ -75,6 +75,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     col.appendChild(card)
                     book_query.appendChild(col)
 
+                    document.querySelectorAll('.col-5').forEach(button => {
+                        console.log('here ' + document.querySelector('button'))
+                        button.onclick = () => {
+                            console.log('something ' + button.dataset.value)
+                            
+                            // const book_data = document.querySelector('#book_link')
+                            // const num = book_data.dataset.value
+                            // console.log(book_data.dataset.value)
+
+                            const request = new XMLHttpRequest()
+                            request.open('POST', `/api/book_details?isbn=${num}`)
+                            request.send()
+                            request.onload = () => {
+                                const response = JSON.parse(request.responseText)
+                                console.log(response)
+                            }
+                            return false
+                        }
+                    })                    
 
                 })
             } 
@@ -89,32 +108,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 
         }
 
+        // console.log(document.querySelector('.col-5'))
+        
+        // document.querySelectorAll('.col-5').forEach(button => {
+        //     console.log('here')
+        //     button.onclick = () => {
+        //         console.log('clicked')
+        //         const book_data = document.querySelector('#book_link')
+        //         const num = book_data.dataset.value
+        //         console.log(book_data.dataset.value)
+
+        //         const request = new XMLHttpRequest()
+        //         request.open('POST', `/api/book_details?isbn=${num}`)
+        //         request.send()
+        //         request.onload = () => {
+        //             const response = JSON.parse(request.responseText)
+        //             console.log(response)
+        //     }
+        //         return false
+        //     }
+        // })
 
         return false
+        
         }
 
-    });
-
-document.addEventListener('DOMContentLoaded', () => {
-
-        document.querySelectorAll('.col-5').forEach(button => {
-            console.log('here')
-            button.onclick = () => {
-                console.log('clicked')
-                const book_data = document.querySelector('#book_link')
-                const num = book_data.dataset.value
-                console.log(book_data.dataset.value)
-
-                const request = new XMLHttpRequest()
-                request.open('POST', `/api/book_details?isbn=${num}`)
-                request.send()
-                request.onload = () => {
-                    const response = JSON.parse(request.responseText)
-                    console.log(response)
-            }
-                return false
-            }
-        })
+        
 
     });
-
