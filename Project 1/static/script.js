@@ -1,17 +1,17 @@
 function clearList() {
+    const error_text = document.querySelector('.book-list')
+    error_text.innerHTML = ''
+
     var row = document.querySelector(".row");
-    while((lis = row.getElementsByTagName("div")).length > 0) {
-        row.removeChild(lis[0]);
-    }
+    row.innerHTML = ''
 }
 
-var isbn = ''
 
 document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelector('.btn').onclick = function() {
-        const request = new XMLHttpRequest();
-        isbn = document.querySelector('#isbn').value
+        const request = new XMLHttpRequest()
+        const isbn = document.querySelector('#isbn').value
         const title = document.querySelector('#title').value
         const author = document.querySelector('#author').value
         const year = document.querySelector('#year').value
@@ -58,9 +58,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     text_year.setAttribute('class', 'card-text')                    
                     text_year.innerHTML = `Year: ${book.year}`
 
-                    let open_btn = document.createElement('a')
+                    let open_btn = document.createElement('button')
                     open_btn.setAttribute('class', 'btn btn-primary')
-                    open_btn.setAttribute('href', `/api/book_details?isbn=${book.isbn}`)
+                    open_btn.setAttribute('id', 'book_link')
+                    // open_btn.setAttribute('href', `/api/book_details?isbn=${book.isbn}`)
+                    open_btn.setAttribute('data-value',`${book.isbn}`)
                     open_btn.innerHTML = 'Open'
 
                     card_body.appendChild(card_title)
@@ -91,17 +93,28 @@ document.addEventListener('DOMContentLoaded', () => {
         return false
         }
 
-        // document.querySelector('#books_resp').onclick = () => {
-        //     let params = '?isbn=' + isbn
-        //     console.log(params)
-        //     const request = new XMLHttpRequest();
-        //     request.open('POST', '/api/book_details'+params)
-        //     request.send()
-        //     request.onload = () => {
-        //         const response = JSON.parse(request.responseText)
-        //         console.log(response)
-        //     }
-        //     return false
-        // }
-    
     });
+
+document.addEventListener('DOMContentLoaded', () => {
+
+        document.querySelectorAll('.col-5').forEach(button => {
+            console.log('here')
+            button.onclick = () => {
+                console.log('clicked')
+                const book_data = document.querySelector('#book_link')
+                const num = book_data.dataset.value
+                console.log(book_data.dataset.value)
+
+                const request = new XMLHttpRequest()
+                request.open('POST', `/api/book_details?isbn=${num}`)
+                request.send()
+                request.onload = () => {
+                    const response = JSON.parse(request.responseText)
+                    console.log(response)
+            }
+                return false
+            }
+        })
+
+    });
+

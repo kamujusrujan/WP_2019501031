@@ -225,7 +225,7 @@ def api_search():
         return jsonify({'status': 500})
 
 
-@app.route('/api/book_details', methods=['GET'])
+@app.route('/api/book_details', methods=['POST'])
 def book_details():
     data = dict(request.args)
     id = data['isbn']
