@@ -226,19 +226,25 @@ def api_search():
 
 
 @app.route('/api/book_details', methods=['POST'])
-def book_details():
-    data = dict(request.args)
-    id = data['isbn']
-    book = Book.query.filter_by(isbn = id).first()
-    review_list  = Ratings.query.filter_by(isbn = id).all()
-    r = []
-    for each in review_list:
-        temp = {}
-        temp['name'] = each.rating_users.name
-        temp['rating'] = each.star
-        temp['description'] = each.description
-        r.append(temp)
+def book_api():
+    isbn_num = dict(request.args)["isbn"]
+    print(isbn_num, type(isbn_num))
+    try:
+        book_data = Book.query.filter_by(isbn = isbn_num).first()
+        if(book_data == None):
+            return jsonify({"status":400})
+        dict_book_api = {"isbn":book_data.isbn,"title":book_data.title,
+        "author":book_data.author,"year":book_data.year,"status":200}
 
-    # ISBN to check review: 62049879
-
-    return jsonify({'status':200, 'book': [book.title, book.author, book.isbn, book.year], 'reviews':r})
+        review_list  = Ratings.query.filter_by(isbn = isbn_num).all()
+        if(len(review_list) == 0):
+            dict_book_api["reviews"] = None
+        else:
+            reviewers = []
+            for reviewer in review_list:
+                reviewers.append({"name":reviewer.rating_users.name,"rating":reviewer.star,
+                    "description":reviewer.description})
+            dict_book_api["reviews"] = reviewers
+        return jsonify(dict_book_api)
+    except:
+        return jsonify({"status":500})
