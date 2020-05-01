@@ -5,7 +5,7 @@
 {%endblock%}
 
 {% block body%}
-
+<p hidden id='username' >{{session['name']}}</p>
 <form class="form-inline" action="{{url_for( 'search' )}}" , method ='post'>
   <div class="form-group mx-sm-3 mb-2">
     <label for="inputPassword2" class="sr-only">isbn</label>
@@ -75,5 +75,11 @@
     {% endfor %}
   </ul>
 </nav>
+
+
+<div class='container' id = 'jscontent'>
+ 
+</div>
+
 
 {% endblock %}

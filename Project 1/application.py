@@ -1,11 +1,12 @@
 import os
 from functools import wraps
-from flask import Flask, session,render_template,request,url_for,redirect,flash
+from flask import Flask, session,render_template,request,url_for,redirect,flash,jsonify
 import random 
 from sqlalchemy import create_engine, cast
 from sqlalchemy.types import String
 from sqlalchemy.orm import scoped_session, sessionmaker
 from database import *
+import json
 # from Books_DB import *
 # from passlib.hash import sha256_crypt
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -204,11 +205,11 @@ def submit_review():
     data = dict(request.args)
     desc,stars,mail,isbn = data['description'],data['stars'],data['mailid'],data['isbn']
     if Book.query.filter_by(isbn = isbn).first() is None:
-        return {'status':400}
+        return jsonify({'status':400})
     try:
         db.session.add( Ratings(isbn = isbn ,mail = mail ,star = stars ,description = desc))
         db.session.commit()
-        return {'status':200}
+        return jsonify({'status':200})
     except:
-        return {'status' : 500}
+        return jsonify({'status' : 500})
 
