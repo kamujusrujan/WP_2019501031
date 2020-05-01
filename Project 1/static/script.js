@@ -1,9 +1,8 @@
 function clearList() {
     const error_text = document.querySelector('.book-list')
     error_text.innerHTML = ''
-
-    var row = document.querySelector(".row");
-    row.innerHTML = ''
+    const block = document.querySelector('#jscontent') 
+    block.innerHTML = ''
 }
 
 function clearFields() {
@@ -29,7 +28,8 @@ function search_html() {
     request.onload = () => {
         const response = JSON.parse(request.responseText)
         console.log(response)
-        const book_query = document.querySelector('.row')
+        const book_query = document.createElement("div")
+        book_query.setAttribute("class","row");
         clearFields()
         if (response.status == 200) {
             clearList()
@@ -76,7 +76,7 @@ function search_html() {
                 card.appendChild(card_body)
                 col.appendChild(card)
                 book_query.appendChild(col)
-
+                document.querySelector('#jscontent').appendChild(book_query)
                 document.querySelectorAll('.btn-primary').forEach(button => {
                     
                     button.onclick = () => {
@@ -107,16 +107,11 @@ function search_html() {
     main()
 }
 
-function book_html(isbn){
-    
-    
-}
 
 function main() {
     console.log('main')
     document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.btn-secondary').onclick = function() {
-        
         search_html()
         return false
     }

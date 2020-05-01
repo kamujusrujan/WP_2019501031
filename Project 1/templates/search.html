@@ -1,13 +1,13 @@
 {% extends "layout.html" %}
 
 {% block banner %}
-	Search page 
+  Search page 
 {%endblock%}
 
 {% block body%}
 
 <script src="{{ url_for('static', filename='script.js') }}"></script>
-
+<p hidden id='username' >{{session['name']}}</p>
 <form class="form-inline" method ='post'>
   <div class="form-group mx-sm-3 mb-2">
     <label for="inputPassword2" class="sr-only">isbn</label>
@@ -35,10 +35,8 @@
   </div>
 
 
-  <div class='container'>
-    <div class = 'row'>
-            
-    </div>
+  <div class='container' id = 'jscontent'>
+   
   </div>
 
 {% endblock %}
