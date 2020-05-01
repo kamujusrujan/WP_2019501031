@@ -223,28 +223,3 @@ def api_search():
         return jsonify(ret_data)
     except:
         return jsonify({'status': 500})
-
-
-@app.route('/api/book_details', methods=['POST'])
-def book_api():
-    isbn_num = dict(request.args)["isbn"]
-    print(isbn_num, type(isbn_num))
-    try:
-        book_data = Book.query.filter_by(isbn = isbn_num).first()
-        if(book_data == None):
-            return jsonify({"status":400})
-        dict_book_api = {"isbn":book_data.isbn,"title":book_data.title,
-        "author":book_data.author,"year":book_data.year,"status":200}
-
-        review_list  = Ratings.query.filter_by(isbn = isbn_num).all()
-        if(len(review_list) == 0):
-            dict_book_api["reviews"] = None
-        else:
-            reviewers = []
-            for reviewer in review_list:
-                reviewers.append({"name":reviewer.rating_users.name,"rating":reviewer.star,
-                    "description":reviewer.description})
-            dict_book_api["reviews"] = reviewers
-        return jsonify(dict_book_api)
-    except:
-        return jsonify({"status":500})
