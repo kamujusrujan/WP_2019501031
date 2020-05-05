@@ -1,7 +1,6 @@
 import os
 from functools import wraps
 from flask import Flask, session,render_template,request,url_for,redirect,flash, jsonify
-from flask_cors import CORS, cross_origin
 import random 
 from sqlalchemy import create_engine, cast
 from sqlalchemy.types import String
@@ -11,6 +10,7 @@ from database import *
 # from passlib.hash import sha256_crypt
 from werkzeug.security import generate_password_hash, check_password_hash
 # from Books_DB import *
+
 
 
 app = Flask(__name__)
@@ -198,6 +198,28 @@ def page(num):
         page_cnt += 1
     return render_template('search.html', book_len=len(book_list), book_list=book_list, page=num-1, flag=flag, page_num=page_cnt)
 
+@app.route('/api/book_details', methods=['POST'])
+def book_api():
+    isbn_num = dict(request.args)["isbn"]
+    try:
+        book_data = Book.query.filter_by(isbn = isbn_num).first()
+        if(book_data == None):
+            return jsonify({"status":400})
+        dict_book_api = {"isbn":book_data.isbn,"title":book_data.title,
+        "author":book_data.author,"year":book_data.year,"status":200}
+
+        review_list  = Ratings.query.filter_by(isbn = isbn_num).all()
+        if(len(review_list) == 0):
+            dict_book_api["reviews"] = None
+        else:
+            reviewers = []
+            for reviewer in review_list:
+                reviewers.append({"name":reviewer.rating_users.name,"rating":reviewer.star,
+                    "description":reviewer.description})
+            dict_book_api["reviews"] = reviewers
+        return jsonify(dict_book_api)
+    except:
+        return jsonify({"status":500})
 
 @app.route('/api/search', methods=['POST'])
 def api_search():
