@@ -214,7 +214,6 @@ def submit_review():
     except:
         return jsonify({'status' : 500})
 
-=======
 @app.route('/api/book_details', methods=['POST'])
 def book_api():
     isbn_num = dict(request.args)["isbn"]

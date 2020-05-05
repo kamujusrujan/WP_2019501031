@@ -42,14 +42,14 @@ function review_book(isbn,desc,star){
 	const uname = document.querySelector("#username").textContent;
 	// console.log(uname,id,d,s);
 	const request = new XMLHttpRequest();
-    let params = '?description='+desc+'&isbn='+id+'&mailid='+uname+'&stars='+star
+    let params = '?description='+desc+'&isbn='+isbn+'&mailid='+uname+'&stars='+star
 
     request.open('POST', '/api/submit_review' + params)
     request.send()
     request.onload = ()=>{
     	let data = JSON.parse(request.responseText);
     	if(data['status'] == 200)
-    		book_html(id)
+    		book_html(isbn)
 		else{
 			const err = document.querySelector("#err")
 			err.innerHTML =  `Error` + data['status'] 	
