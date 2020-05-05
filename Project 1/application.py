@@ -1,6 +1,6 @@
 import os
 from functools import wraps
-from flask import Flask, jsonify,session,render_template,request,url_for,redirect,flash
+from flask import Flask, session,render_template,request,url_for,redirect,flash, jsonify
 import random 
 from sqlalchemy import create_engine, cast
 from sqlalchemy.types import String
@@ -133,7 +133,6 @@ def admin():
 def book(id):
     if(request.method == 'POST'):
         desc,stars = request.form.get('description'), request.form.get('rating')
-
         duplicate = Ratings.query.filter_by(isbn = id,mail = session['name']).first() 
         if duplicate is not None:
             flash("You have already reviewed this book",'danger')
@@ -221,3 +220,27 @@ def book_api():
         return jsonify(dict_book_api)
     except:
         return jsonify({"status":500})
+
+@app.route('/api/search', methods=['POST'])
+def api_search():
+    data = dict(request.args)
+
+    loc_data = {'isbn':'', 'title':'', 'author':'', 'year':''}
+    for each in data:
+        loc_data[each] = data[each]
+    try:
+        book_list = Book.query.filter(Book.isbn.like('%'+loc_data['isbn']+'%') & Book.title.like('%'+loc_data['title']+'%') & Book.author.like('%'+loc_data['author']+'%') & cast(Book.year,String).like('%'+str(loc_data['year'])+'%')).all()
+        
+        ret_list = []
+        ret_data = {}
+        if len(book_list) == 0:
+            return jsonify({'status': 400})
+        for each in book_list:
+            ret_list.append({'isbn':each.isbn, 'title':each.title, 'author':each.author, 'year':each.year})
+        ret_data['books'] = ret_list
+        ret_data['status'] = 200
+
+        
+        return jsonify(ret_data)
+    except:
+        return jsonify({'status': 500})

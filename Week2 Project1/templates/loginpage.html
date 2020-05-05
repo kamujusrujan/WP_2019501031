@@ -1,0 +1,17 @@
+
+{% extends "layout.html" %}
+
+{% block banner %}
+	Login page 
+{%endblock%}
+
+
+{% block body%}
+	{% with page = 'login'%}
+	{% include '_form.html' %}
+	{%endwith%}
+	
+{% endblock %}
+
+
+
