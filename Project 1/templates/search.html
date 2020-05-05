@@ -1,80 +1,43 @@
 {% extends "layout.html" %}
 
 {% block banner %}
-	Search page 
+  Search page 
 {%endblock%}
 
 {% block body%}
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 <p hidden id='username' >{{session['name']}}</p>
-<form class="form-inline" action="{{url_for( 'search' )}}" , method ='post'>
+<form class="form-inline" method ='post'>
   <div class="form-group mx-sm-3 mb-2">
     <label for="inputPassword2" class="sr-only">isbn</label>
-    <input type="text" name='isbn' class="form-control" id="inputPassword2" placeholder="isbn">
+    <input type="text" name='isbn' class="form-control" id="isbn" placeholder="isbn" value="">
   </div>
   <div class="form-group mx-sm-3 mb-2">
     <label for="inputPassword2" class="sr-only">title</label>
-    <input type="text" name='title' class="form-control" id="inputPassword2" placeholder="title">
+    <input type="text" name='title' class="form-control" id="title" placeholder="title" value="">
   </div>
   <div class="form-group mx-sm-3 mb-2">
     <label for="inputPassword2" class="sr-only">author</label>
-    <input type="text" name='author' class="form-control" id="inputPassword2" placeholder="author">
+    <input type="text" name='author' class="form-control" id="author" placeholder="author" value="">
   </div>
   <div class="form-group mx-sm-3 mb-2">
     <label for="inputPassword2" class="sr-only">year</label>
-    <input type="text" name='year' class="form-control" id="inputPassword2" placeholder="year">
+    <input type="text" name='year' class="form-control" id="year" placeholder="year" value="">
   </div>
-  <button class="btn btn-primary mb-2">Search</button>
+  <button class="btn btn-secondary">Search</button>
 </form>
 
 
-{% if book_len > 0 %}
-  <div class="row">
-    {% if flag %}
-    {% for i in range(10*page, book_len) %}
-      <div class="col-5">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">{{ book_list[i].title }}</h5>
-          <p class="card-text">ISBN: {{ book_list[i].isbn }}</p>
-          <p class="card-text">Author: {{ book_list[i].author }}</p>
-          <p class="card-text">Year: {{ book_list[i].year }}</p>
 
-          <a href="/book/{{book_list[i].isbn}}" class="btn btn-primary">Open</a>
-        </div>
-      </div>
-    </div>
-    {% endfor %}
-    {% else %}
-    {% for i in range(10*page, 10*(page+1)) %}
-    <div class="col-5">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">{{ book_list[i].title }}</h5>
-          <p class="card-text">ISBN: {{ book_list[i].isbn }}</p>
-          <p class="card-text">Author: {{ book_list[i].author }}</p>
-          <p class="card-text">Year: {{ book_list[i].year }}</p>
-
-          <a href="/book/{{book_list[i].isbn}}" class="btn btn-primary">Open</a>
-        </div>
-      </div>
-    </div>
-    {% endfor %}
-    {% endif %}
+  <div class='container'>
+    <ul id='books_resp' class='book-list'></ul>    
   </div>
-{% endif %}
 
 
-
-<br>
-
-<nav aria-label="Page navigation example">
-  <ul class="pagination justify-content-center flex-sm-wrap">
-    
-    {% for i in range(page_num) %}
-    <li class="page-item"><a class="page-link" href="/page/{{i+1}}"> {{i+1}} </a></li>
-    {% endfor %}
-  </ul>
-</nav>
+  <div class='container' id = 'jscontent'>
+   
+  </div>
 
 
 <div class='container' id = 'jscontent'>

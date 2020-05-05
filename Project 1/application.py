@@ -1,6 +1,6 @@
 import os
 from functools import wraps
-from flask import Flask, session,render_template,request,url_for,redirect,flash,jsonify
+from flask import Flask, session,render_template,request,url_for,redirect,flash, jsonify
 import random 
 from sqlalchemy import create_engine, cast
 from sqlalchemy.types import String
@@ -11,6 +11,7 @@ import json
 # from passlib.hash import sha256_crypt
 from werkzeug.security import generate_password_hash, check_password_hash
 # from Books_DB import *
+
 
 
 app = Flask(__name__)
@@ -213,3 +214,50 @@ def submit_review():
     except:
         return jsonify({'status' : 500})
 
+=======
+@app.route('/api/book_details', methods=['POST'])
+def book_api():
+    isbn_num = dict(request.args)["isbn"]
+    try:
+        book_data = Book.query.filter_by(isbn = isbn_num).first()
+        if(book_data == None):
+            return jsonify({"status":400})
+        dict_book_api = {"isbn":book_data.isbn,"title":book_data.title,
+        "author":book_data.author,"year":book_data.year,"status":200}
+
+        review_list  = Ratings.query.filter_by(isbn = isbn_num).all()
+        if(len(review_list) == 0):
+            dict_book_api["reviews"] = None
+        else:
+            reviewers = []
+            for reviewer in review_list:
+                reviewers.append({"name":reviewer.rating_users.name,"rating":reviewer.star,
+                    "description":reviewer.description})
+            dict_book_api["reviews"] = reviewers
+        return jsonify(dict_book_api)
+    except:
+        return jsonify({"status":500})
+
+@app.route('/api/search', methods=['POST'])
+def api_search():
+    data = dict(request.args)
+
+    loc_data = {'isbn':'', 'title':'', 'author':'', 'year':''}
+    for each in data:
+        loc_data[each] = data[each]
+    try:
+        book_list = Book.query.filter(Book.isbn.like('%'+loc_data['isbn']+'%') & Book.title.like('%'+loc_data['title']+'%') & Book.author.like('%'+loc_data['author']+'%') & cast(Book.year,String).like('%'+str(loc_data['year'])+'%')).all()
+        
+        ret_list = []
+        ret_data = {}
+        if len(book_list) == 0:
+            return jsonify({'status': 400})
+        for each in book_list:
+            ret_list.append({'isbn':each.isbn, 'title':each.title, 'author':each.author, 'year':each.year})
+        ret_data['books'] = ret_list
+        ret_data['status'] = 200
+
+        
+        return jsonify(ret_data)
+    except:
+        return jsonify({'status': 500})
