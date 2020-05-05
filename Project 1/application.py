@@ -6,6 +6,7 @@ from sqlalchemy import create_engine, cast
 from sqlalchemy.types import String
 from sqlalchemy.orm import scoped_session, sessionmaker
 from database import *
+import json
 # from Books_DB import *
 # from passlib.hash import sha256_crypt
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -163,7 +164,7 @@ def search():
         book_title = request.form.get('title')
         book_author = request.form.get('author')
         book_year = request.form.get('year')
-
+        # print(dict(request.form))
         page_num = 0
         flag = False
 
@@ -198,6 +199,22 @@ def page(num):
         page_cnt += 1
     return render_template('search.html', book_len=len(book_list), book_list=book_list, page=num-1, flag=flag, page_num=page_cnt)
 
+
+
+@app.route('/api/submit_review',methods = ['POST'])
+def submit_review():
+    data = dict(request.args)
+    desc,stars,mail,isbn = data['description'],data['stars'],data['mailid'],data['isbn']
+    if Book.query.filter_by(isbn = isbn).first() is None:
+        return jsonify({'status':400})
+    try:
+        db.session.add( Ratings(isbn = isbn ,mail = mail ,star = stars ,description = desc))
+        db.session.commit()
+        return jsonify({'status':200})
+    except:
+        return jsonify({'status' : 500})
+
+=======
 @app.route('/api/book_details', methods=['POST'])
 def book_api():
     isbn_num = dict(request.args)["isbn"]
